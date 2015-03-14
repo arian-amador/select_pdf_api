@@ -1,4 +1,5 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
+$:.unshift File.expand_path('../../config', __FILE__)
 require 'select_pdf_api'
 
 require 'minitest/autorun'
@@ -6,7 +7,7 @@ require 'webmock/minitest'
 require 'vcr'
 
 VCR.configure do |c|
-	config = SelectPdfApi::Config.new
+	config = SelectPdfApi::Config.new "select-pdf-config.yml"
 
 	c.allow_http_connections_when_no_cassette = false
 	c.filter_sensitive_data('<API_KEY>') { config.api_key }

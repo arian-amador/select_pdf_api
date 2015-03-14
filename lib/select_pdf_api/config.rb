@@ -1,29 +1,30 @@
-require 'yaml'
-
 class SelectPdfApi
 	class Config
-		attr_reader :data
 
-		def initialize(filename="select-pdf-config.yml")
+		def initialize(filename)
 			config_file = File.join(File.expand_path(File.join('config')), filename)
+
 			raise SelectPdfApi::ConfigError, "Config file #{config_file} does not exist." unless
 				File.exist? config_file
 
-			@data = {}
-			@data = YAML::load_file(config_file)
-			raise SelectPdfApi::ConfigError, "Error reading #{config_file}." unless @data
-
-			define_methods(@data.keys)
+			define_methods load_data(config_file)
 		end
 
+		# TODO: Is this the best way to do this?
 		def define_methods(names)
-			names.each do |name|
-				self.class.class_eval <<-EORUBY
-					def #{name}
-						@data["#{name}"]
-					end
-				EORUBY
+			names.each do |name, value|
+        self.class.class_eval("def #{name}; @#{name}; end")
+        self.class.class_eval("def #{name}=(val); @#{name}=val; end")
+        instance_variable_set "@#{name}", value
 			end
 		end
+
+		private
+			def load_data(config_file)
+				data = {}
+				data = YAML::load_file(config_file)
+				raise SelectPdfApi::ConfigError, "Error reading #{config_file}." unless data
+				data
+			end
 	end
 end

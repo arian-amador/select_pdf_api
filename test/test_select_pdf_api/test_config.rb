@@ -1,52 +1,8 @@
 require './test/minitest_helper'
 
-# API test
-describe SelectPdfApi do
-	let(:select_pdf) {SelectPdfApi.new}
-	let(:another_select_pdf) {
-		SelectPdfApi.new SelectPdfApi::Config.new('../test/fixtures/all-options-config.yml')
-	}
-	let(:valid_url) 	{'http://www.google.com'}
-	let(:invalid_url) {'invalid_url'}
-
-
-
-	def test_it_exists
-		assert select_pdf
-		select_pdf.must_be_instance_of SelectPdfApi
-	end
-
-	def test_it_builds_a_valid_query_string_with_options
-		res_query = "key=api_key&page_size=Letter&page_orientation=Landscape&margin_right=2&margin_bottom=2&margin_left=1.25&user_password=user-password&owner_password=owner-password"
-		another_select_pdf.build_query.must_equal res_query
-	end
-
-	describe "#download" do
-		def test_it_has_download
-			select_pdf.must_respond_to 'download'
-		end
-
-		def test_it_fails_without_a_url
-			-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
-		end
-
-		def test_it_fails_with_an_invalid_url
-			VCR.use_cassette('download_with_invalid_url', :record => :new_episodes) do
-				-> {select_pdf.download invalid_url}.must_raise SelectPdfApi::RequestError
-			end
-		end
-
-		def test_it_downloads_a_pdf
-			VCR.use_cassette('download', :record => :new_episodes) do
-				select_pdf.download valid_url
-			end
-		end
-	end
-end
-
 # Config test
 describe SelectPdfApi::Config do
-	let(:minimum_config) {SelectPdfApi::Config.new}
+	let(:minimum_config) {SelectPdfApi::Config.new '../test/fixtures/select-pdf-config.yml'}
 	let(:all_options_config) {SelectPdfApi::Config.new '../test/fixtures/all-options-config.yml'}
 	let(:blank_config) {SelectPdfApi::Config.new '../test/fixtures/blank-config.yml'}
 	let(:invalid_config) {SelectPdfApi::Config.new 'invalid_config'}
@@ -87,5 +43,4 @@ describe SelectPdfApi::Config do
 			all_options_config.owner_password.must_equal "owner-password"
 		end
 	end
-
 end
