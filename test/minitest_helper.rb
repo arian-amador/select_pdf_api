@@ -6,7 +6,7 @@ require 'webmock/minitest'
 require 'vcr'
 
 VCR.configure do |c|
-	config = SelectPDF::Config.new
+	config = SelectPdfApi::Config.new
 
 	c.allow_http_connections_when_no_cassette = true
 	c.filter_sensitive_data('<API_KEY>') { config.api_key }

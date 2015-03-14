@@ -1,23 +1,23 @@
 require 'httparty'
 
-require 'select_pdf/config'
-require 'select_pdf/exceptions'
+require 'select_pdf_api/config'
+require 'select_pdf_api/exceptions'
 
-class SelectPDF
+class SelectPdfApi
 
 	attr_reader :config
 
-	API_URL = 'http://selectpdf.com/api'
+	API_URL = 'http://SelectPdfApi.com/api'
 	API_QUERY_OPTIONS = %w{ page_size page_orientation pdf_name margin_top
 		margin_right margin_bottom margin_left page_numbers user_password
 		owner_password web_page_width web_page_height min_load_time max_load_time }
 
-	def initialize(config=SelectPDF::Config.new)
+	def initialize(config=SelectPdfApi::Config.new)
 		@config = config
 	end
 
 	def download(url=nil)
-		raise SelectPDF::DownloadError, "A URL must be specified." if url.nil?
+		raise SelectPdfApi::DownloadError, "A URL must be specified." if url.nil?
 
 		temp = Tempfile.new('pdf')
 		tempname = temp.path
@@ -28,7 +28,7 @@ class SelectPDF
 		if response.success?
 			File.open(tempname, "wb") {|f| f.write response.parsed_response}
 		else
-			raise SelectPDF::RequestError
+			raise SelectPdfApi::RequestError
 		end
 	end
 

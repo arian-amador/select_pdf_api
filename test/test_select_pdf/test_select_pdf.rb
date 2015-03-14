@@ -1,10 +1,10 @@
 require './test/minitest_helper'
 
 # API test
-describe SelectPDF do
-	let(:select_pdf) {SelectPDF.new}
+describe SelectPdfApi do
+	let(:select_pdf) {SelectPdfApi.new}
 	let(:another_select_pdf) {
-		SelectPDF.new SelectPDF::Config.new('../test/fixtures/all-options-config.yml')
+		SelectPdfApi.new SelectPdfApi::Config.new('../test/fixtures/all-options-config.yml')
 	}
 	let(:valid_url) 	{'http://www.google.com'}
 	let(:invalid_url) {'invalid_url'}
@@ -13,7 +13,7 @@ describe SelectPDF do
 
 	def test_it_exists
 		assert select_pdf
-		select_pdf.must_be_instance_of SelectPDF
+		select_pdf.must_be_instance_of SelectPdfApi
 	end
 
 	def test_it_builds_a_valid_query_string_with_options
@@ -27,12 +27,12 @@ describe SelectPDF do
 		end
 
 		def test_it_fails_without_a_url
-			-> {select_pdf.download}.must_raise SelectPDF::DownloadError
+			-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
 		end
 
 		def test_it_fails_with_an_invalid_url
 			VCR.use_cassette('download_with_invalid_url') do
-				-> {select_pdf.download invalid_url}.must_raise SelectPDF::RequestError
+				-> {select_pdf.download invalid_url}.must_raise SelectPdfApi::RequestError
 			end
 		end
 
@@ -45,18 +45,18 @@ describe SelectPDF do
 end
 
 # Config test
-describe SelectPDF::Config do
-	let(:minimum_config) {SelectPDF::Config.new}
-	let(:all_options_config) {SelectPDF::Config.new '../test/fixtures/all-options-config.yml'}
-	let(:blank_config) {SelectPDF::Config.new '../test/fixtures/blank-config.yml'}
-	let(:invalid_config) {SelectPDF::Config.new 'invalid_config'}
+describe SelectPdfApi::Config do
+	let(:minimum_config) {SelectPdfApi::Config.new}
+	let(:all_options_config) {SelectPdfApi::Config.new '../test/fixtures/all-options-config.yml'}
+	let(:blank_config) {SelectPdfApi::Config.new '../test/fixtures/blank-config.yml'}
+	let(:invalid_config) {SelectPdfApi::Config.new 'invalid_config'}
 
 	def test_it_should_fail_with_an_invalid_config
-		-> {invalid_config}.must_raise SelectPDF::ConfigError
+		-> {invalid_config}.must_raise SelectPdfApi::ConfigError
 	end
 
 	def test_it_should_fail_with_a_blank_config
-		-> {blank_config}.must_raise SelectPDF::ConfigError
+		-> {blank_config}.must_raise SelectPdfApi::ConfigError
 	end
 
 	describe "Config with minimum settings ex: just the API key" do

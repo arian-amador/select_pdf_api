@@ -4,8 +4,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'select_pdf/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "select-pdf-api"
-  spec.version       = SelectPDF::VERSION
+  spec.name          = "select_pdf_api"
+  spec.version       = SelectPdfApi::VERSION
   spec.authors       = ["Arian Amador"]
   spec.email         = ["arian@arianamador.com"]
   spec.summary       = %q{Wrapper library for the Select PDF service.}
@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
 
   spec.files         = `git ls-files -z`.split("\x0")
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
+  spec.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.post_install_message = "PDF all the web of things!"
