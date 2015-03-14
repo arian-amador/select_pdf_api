@@ -2,7 +2,7 @@ require 'yaml'
 require 'httparty'
 require 'tempfile'
 
-require 'select_pdf_api/config'
+require 'select_pdf_api/yaml_file_config'
 require 'select_pdf_api/exceptions'
 
 class SelectPdfApi
@@ -10,54 +10,50 @@ class SelectPdfApi
 
 	API_URL = 'http://selectpdf.com/api'
 
-	API_QUERY_OPTIONS = %w{ page_size page_orientation pdf_name margin_top
-		margin_right margin_bottom margin_left page_numbers user_password
-		owner_password web_page_width web_page_height min_load_time max_load_time }
-
+	# TODO: Refactor this...
 	DEFAULT_OPTIONS = {
-		config: "select-pdf-config.yml"
+		config_file: "select-pdf-config.yml"
 	}
 
 	def initialize(user_opts={})
 		opts = DEFAULT_OPTIONS.merge user_opts
 
 		@url 		 = opts[:url]
-		@config = SelectPdfApi::Config.new opts[:config]
+		@config  = opts[:config] || SelectPdfApi::YamlFileConfig.new(opts[:config_file])
 		@save_to = opts[:save_to] || temp_file
+		@success = false
 	end
 
 	def download
 		raise SelectPdfApi::DownloadError, "A URL must be specified." if @url.nil?
 
-		request  = "#{API_URL}/?#{build_query}&url=#{@url}"
+		request  = "#{API_URL}/?#{params}"
 		response = HTTParty.get request
 
 		if response.success?
 			File.open(@save_to, "wb") {|f| f.write response.parsed_response}
+			@success = true
 		else
 			raise SelectPdfApi::DownloadError, "There was an error with the following request #{request}"
 		end
 	end
 
-	def build_query
-
-		query_string = ["key=#{@config.api_key}"]
-
-		#TODO Should be dynamic from config instace_variables
-		API_QUERY_OPTIONS.each do |option|
-			query_string << "#{option}=#{@config.send(option)}" if @config.respond_to? option
-		end
-
-		query_string.join('&')
+	def params
+		result = []
+		@config.options.sort.map { |name, value| result << "#{name}=#{value}" }
+		result << "url=#{@url}"
+		result.join('&')
 	end
 
-	private
+	def success?
+		@success
+	end
 
-		def temp_file
-			temp = Tempfile.new('pdf')
-			tempname = temp.path
-			temp.close
-			tempname
-		end
+	def temp_file
+		temp = Tempfile.new('pdf')
+		tempname = temp.path
+		temp.close
+		tempname
+	end
 
 end

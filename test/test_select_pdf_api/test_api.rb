@@ -3,31 +3,17 @@ require './test/minitest_helper'
 # API test
 describe SelectPdfApi do
 	let(:valid_url) 	{'http://www.google.com'}
-	let(:select_pdf) { SelectPdfApi.new({url: valid_url}) }
-	let(:valid_select_pdf) {
-		SelectPdfApi.new({
-			url: valid_url,
-			config: '../test/fixtures/select-pdf-config.yml'
-		})
-	}
-	let(:another_select_pdf) {
-		SelectPdfApi.new({
-			url: valid_url,
-			config: '../test/fixtures/all-options-config.yml'
-		})
-	}
 	let(:invalid_url) { SelectPdfApi.new({url: 'invalid_url'}) }
 
-	def test_it_exists
-		assert select_pdf
-		select_pdf.must_be_instance_of SelectPdfApi
-	end
+	let(:default_config_api) { SelectPdfApi.new({url: valid_url})}
+	let(:minimum_config_api) { SelectPdfApi.new({url: valid_url,
+		config_file: '../test/fixtures/minimum-config.yml'})}
+	let(:maximum_config_api) { SelectPdfApi.new({url: valid_url,
+			config_file: '../test/fixtures/all-config.yml'})}
 
-	def test_url_should_be_changable
-		test_url = "http://mail.yahoo.com"
-		select_pdf.url.must_equal valid_url
-		select_pdf.url = test_url
-		select_pdf.url.must_equal test_url
+	def test_class_exists
+		assert default_config_api
+		default_config_api.must_be_instance_of SelectPdfApi
 	end
 
 	def test_save_to_should_be_changable
@@ -42,29 +28,29 @@ describe SelectPdfApi do
 
 	def test_url_should_be_changable
 		modified_url = "http://mail.yahoo.com"
-		select_pdf.url.must_equal valid_url
-		select_pdf.url = modified_url
-		select_pdf.url.must_equal modified_url
+
+		default_config_api.url.must_equal valid_url
+		default_config_api.url = modified_url
+		default_config_api.url.must_equal modified_url
 	end
 
-	def test_config_api_key_should_be_changable
-		modified_api_key = "new_random_value_for_the_api_key123"
+	describe "#params" do
+		def test_params_exists
+			default_config_api.must_respond_to 'params'
+		end
 
-		valid_select_pdf.config.api_key.must_equal 'random-valid-api-123abc-345dbc'
-		valid_select_pdf.config.api_key = modified_api_key
-		valid_select_pdf.config.api_key.must_equal modified_api_key
-	end
+		def test_it_should_build_params_for_all_options
+			maximum_config_api.params.must_equal "key=valid-key-123-67ad&margin_bottom=2pt&margin_left=1.25pt&margin_right=2pt&owner_password=owner567&page_orientation=Landscape&page_size=Letter&user_password=user123&url=http://www.google.com"
+		end
 
-	describe "#build_query" do
-		def test_it_builds_a_valid_query_string_with_options
-			result = "key=api_key&page_size=Letter&page_orientation=Landscape&margin_right=2&margin_bottom=2&margin_left=1.25&user_password=user-password&owner_password=owner-password"
-			another_select_pdf.build_query.must_equal result
+		def test_it_should_build_params_for_minimum_options
+			minimum_config_api.params.must_equal "key=random-valid-api-123abc-345dbc&url=http://www.google.com"
 		end
 	end
 
 	describe "#download" do
-		def test_it_has_download
-			select_pdf.must_respond_to 'download'
+		def test_download_exists
+			default_config_api.must_respond_to 'download'
 		end
 
 		def test_it_fails_without_a_url
@@ -79,7 +65,8 @@ describe SelectPdfApi do
 
 		def test_it_downloads_a_pdf
 			VCR.use_cassette('download', :record => :new_episodes) do
-				select_pdf.download
+				default_config_api.download
+				default_config_api.success?
 			end
 		end
 	end
