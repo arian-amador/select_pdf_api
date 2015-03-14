@@ -7,7 +7,7 @@ class SelectPdfApi
 
 	attr_reader :config
 
-	API_URL = 'http://SelectPdfApi.com/api'
+	API_URL = 'http://selectpdf.com/api'
 	API_QUERY_OPTIONS = %w{ page_size page_orientation pdf_name margin_top
 		margin_right margin_bottom margin_left page_numbers user_password
 		owner_password web_page_width web_page_height min_load_time max_load_time }

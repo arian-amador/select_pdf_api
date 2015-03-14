@@ -31,13 +31,13 @@ describe SelectPdfApi do
 		end
 
 		def test_it_fails_with_an_invalid_url
-			VCR.use_cassette('download_with_invalid_url') do
+			VCR.use_cassette('download_with_invalid_url', :record => :new_episodes) do
 				-> {select_pdf.download invalid_url}.must_raise SelectPdfApi::RequestError
 			end
 		end
 
 		def test_it_downloads_a_pdf
-			VCR.use_cassette('download') do
+			VCR.use_cassette('download', :record => :new_episodes) do
 				select_pdf.download valid_url
 			end
 		end
