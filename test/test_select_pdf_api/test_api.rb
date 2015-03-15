@@ -7,7 +7,7 @@ describe SelectPdfApi do
 	let(:maximum_config) {"#{fixtures}/all-config.yml"}
 	let(:blank_config)   {"#{fixtures}/blank-config.yml"}
 
-	let(:select_pdf)  {SelectPdfApi.new({url: 'http://www.google.com'})}
+	let(:select_pdf)  {SelectPdfApi.new({url: 'http://www.google.com', config_file: minimum_config})}
 
 	before do
 		select_pdf.config.load_config(minimum_config)
@@ -54,7 +54,7 @@ describe SelectPdfApi do
 		end
 
 		def test_it_fails_without_a_url
-			-> {SelectPdfApi.new.download}.must_raise SelectPdfApi::DownloadError
+			-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
 		end
 	end
 end
