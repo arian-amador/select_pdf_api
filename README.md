@@ -1,4 +1,4 @@
-# select-pdf-api
+# select_pdf_api
 
 A wrapper for the [selectpdf.org](http://selectpdf.com/) public API.
 
