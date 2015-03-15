@@ -1,5 +1,7 @@
 # select_pdf_api
 
+[![Gem Version](https://badge.fury.io/rb/select_pdf_api.svg)](http://badge.fury.io/rb/select_pdf_api)    [![Build Status](https://travis-ci.org/arian-amador/select_pdf_api.svg?style=flat)](https://travis-ci.org/arian-amador/select_pdf_api)    [![Inline docs ](https://inch-ci.org/github/arian-amador/select_pdf_api.svg?branch=master)](https://inch-ci.org/github/arian-amador/select_pdf_api)
+
 A wrapper for the [selectpdf.org](http://selectpdf.com/) public API.
 
 The [selectpdf.org](http://selectpdf.com/) online API allows you to create PDFs from web pages and raw HTML code in your applications.
