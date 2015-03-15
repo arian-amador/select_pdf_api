@@ -32,8 +32,8 @@ See the [API Documentation](https://github.com/arian-amador/select_pdf_api/) for
 
 ##### Default
 ``` ruby
-pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Will load the default select-pdf-config.yml and setup the url to capture. 
-pdf_doc.download   # Will save result to the default ./document.pdf
+pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Load the default select-pdf-config.yml and setup the url to capture. 
+pdf_doc.download   # Save result to the default ./document.pdf
 
 ```
 ##### Load a specific config per download
@@ -41,7 +41,8 @@ pdf_doc.download   # Will save result to the default ./document.pdf
 
 sites = [
   {url: "http://www.google.com", save_to: 'google_com.pdf'},
-  {url: "http://mail.yahoo.com", save_to: 'mail_yahoo.pdf', config_file: 'password-protected-yahoo.yml'}]
+  {url: "http://mail.yahoo.com", save_to: 'mail_yahoo.pdf', 
+    config_file: 'password-protected-yahoo.yml'}]
 
 sites.each do |options|
   pdf = SelectPdfApi.new options
@@ -52,7 +53,7 @@ end
 ##### Changing config options
 ``` ruby
 pdf = SelectPdfApi.new   # Loads default config file.
-pdf.config.load_config('wide_margins.yml')   # Loads wide margin options.
+pdf.config.load_config('wide_margins.yml')   # Load wide margin options.
 pdf.download
 ```
 
