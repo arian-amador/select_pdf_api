@@ -1,6 +1,5 @@
 require 'yaml'
 require 'httparty'
-require 'tempfile'
 
 require 'select_pdf_api/yaml_file_config'
 require 'select_pdf_api/exceptions'
@@ -12,7 +11,8 @@ class SelectPdfApi
 
 	# TODO: Refactor this...
 	DEFAULT_OPTIONS = {
-		config_file: "select-pdf-config.yml"
+		config_file: "select-pdf-config.yml",
+		save_to: "document.pdf"
 	}
 
 	def initialize(user_opts={})
@@ -20,7 +20,7 @@ class SelectPdfApi
 
 		@url 		 = opts[:url]
 		@config  = opts[:config] || SelectPdfApi::YamlFileConfig.new(opts[:config_file])
-		@save_to = opts[:save_to] || temp_file
+		@save_to = opts[:save_to]
 		@success = false
 	end
 
@@ -47,13 +47,6 @@ class SelectPdfApi
 
 	def success?
 		@success
-	end
-
-	def temp_file
-		temp = Tempfile.new('pdf')
-		tempname = temp.path
-		temp.close
-		tempname
 	end
 
 end
