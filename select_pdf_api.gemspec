@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["arian@arianamador.com"]
   spec.summary       = %q{Wrapper library for the Select PDF service.}
   spec.description   = %q{Wrapper library for the Select PDF service. SelectPdf offers a REST API that can be used to convert html to pdf in any language with our dedicated web service.}
-  spec.homepage      = "https://www.github.com/arian-amador/select-pdf-api"
+  spec.homepage      = "https://www.github.com/arian-amador/select_pdf_api"
   spec.licenses      = ["MIT"]
 
   spec.files         = `git ls-files -z`.split("\x0")
