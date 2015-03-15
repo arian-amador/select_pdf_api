@@ -8,7 +8,7 @@ require 'select_pdf_api/exceptions'
 class SelectPdfApi
 
 	# @!attribute [r] config
-	#   @return [Class] Config object used to parse options.
+	#   @return [Object] Config object used to parse options.
 	attr_reader :config
 
 	# @!attribute [rw] save_to
@@ -70,7 +70,7 @@ class SelectPdfApi
 	end
 
 	# @!method success?
-	# @return [Boolean] Returns weather the latest download request was successful.
+	# @return [Boolean] returns weather the latest download request was successful.
 	def success?
 		@success
 	end
