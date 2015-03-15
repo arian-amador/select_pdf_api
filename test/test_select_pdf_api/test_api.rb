@@ -54,7 +54,9 @@ describe SelectPdfApi do
 		end
 
 		def test_it_fails_without_a_url
-			-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
+			VCR.use_cassette('download_no_url') do
+				-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
+			end
 		end
 	end
 end
