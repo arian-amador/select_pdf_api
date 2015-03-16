@@ -9,7 +9,7 @@ The [selectpdf.org](http://selectpdf.com/) online API allows you to create PDFs 
 ## Installation
 Add this line to your application's Gemfile:
 
-    gem 'select_pdf_api'
+    gem "select_pdf_api"
 
 And then execute:
 
@@ -19,45 +19,69 @@ Or install it yourself as:
 
     $ gem install select_pdf_api
 
-You'll need to have a config folder and at least the default select-pdf-config.yml file. Inside your config folder you'll be able to have as many config.yml files as necessary.
-
-    mkdir config
-    touch select-pdf-config.yml
-
-Inside your select-pdf-config.yml:
-``` ruby
-key: 'service api key'
-```
-See the [API Documentation](https://github.com/arian-amador/select_pdf_api/) for all the options. 
-
 ## Usage
-
-##### Default
 ``` ruby
-pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Load the default select-pdf-config.yml and setup the url to capture. 
+pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Load the default ./config/select-pdf-config.yml and set the url to capture 
 pdf_doc.download   # Save result to the default ./document.pdf
 
 ```
-##### Load a specific config per download
+Loada a different YAML config files using for default YamlConfig class:
 ``` ruby
+pdf_doc = SelectPdfApi.new
+pdf_doc.config.load_config("wide_margins.yml")
+pdf_doc.download
+```
+Modify existing options:
+``` ruby
+pdf_doc = SelectPdfApi.new
+pdf_doc.config.options['key'] = ENV["SELECT_PDF_API"]   # Set key from ENV variable
+pdf_doc.config.options['user_password'] = "password123" # Set password when opening PDF
+pdf_doc.download
 
-sites = [
-  {url: "http://www.google.com", save_to: 'google_com.pdf'},
-  {url: "http://mail.yahoo.com", save_to: 'mail_yahoo.pdf', 
-    config_file: 'password-protected-yahoo.yml'}]
+```
+## Config
+By default the YamlConfig class is used to parse a `yml` file that holds all API options including the API key. You'll need to have a config folder and at minimum 
+`select-pdf-config.yml`. 
 
-sites.each do |options|
-  pdf = SelectPdfApi.new options
-  pdf.download
-end
+```ruby
+# Inside your project folder:
+$ mkdir config
+$ touch select-pdf-config.yml
+
+# Yaml file contents
+key: "service api key"
+other_options: ...
+```
+Loading your API key from an environment variable is also easy using the available EnvConfig class.
+```ruby
+env_config = SelectPdfApi::EnvConfig.new() # Uses the default ENV['SELECT_PDF_KEY']
+custom_env = SelectPdfApi::EnvConfig.new('MY_SELECT_KEY') # Uses the user provided ENV['MY_SELECT_KEY']
+
+pdf_select = SelectPdfApi.new({url: "http://www.google.com", config: env_config})
+pdf_select.config.options['key']   # Returns the API key
 ```
 
-##### Changing config options
+It's also possible to create your own Config class as long as it has an `options` method that returns a `Hash` of options.
 ``` ruby
-pdf = SelectPdfApi.new   # Loads default config file.
-pdf.config.load_config('wide_margins.yml')   # Load wide margin options.
-pdf.download
+require "select_pdf_api"                                                        
+                                                                                
+class SelectConfig                                                              
+  class ActiveDirectoryConfig                                                              
+                                                                                
+  # ... snip ...
+                                                                                
+    def options                                                                 
+      # Returns [Hash] of options
+    end                                                                         
+  end                                                                           
+end                                                                             
+                                                                                
+pdf_select = SelectPdfApi.new({url: "http://www.google.com", config: SelectConfig::TestConfig.new})
+pdf_select.config.options   # Return [Hash] from custom class
+
 ```
+
+See the [API Documentation](https://github.com/arian-amador/select_pdf_api/) for all the options. 
 
 ## Documentation
 * API - http://selectpdf.com/html-to-pdf-api/

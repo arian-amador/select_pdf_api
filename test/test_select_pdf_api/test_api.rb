@@ -3,11 +3,14 @@ require './test/minitest_helper'
 # API test
 describe SelectPdfApi do
 	let(:fixtures)			 {"../test/fixtures"}
-	let(:minimum_config) {"#{fixtures}/minimum-config.yml"}
-	let(:maximum_config) {"#{fixtures}/all-config.yml"}
-	let(:blank_config)   {"#{fixtures}/blank-config.yml"}
+	let(:minimum_config) {"#{fixtures}/minimum-config"}
+	let(:maximum_config) {"#{fixtures}/all-config"}
+	let(:blank_config)   {"#{fixtures}/blank-config"}
 
-	let(:select_pdf)  {SelectPdfApi.new({url: 'http://www.google.com', config_file: minimum_config})}
+	let(:select_pdf)  {SelectPdfApi.new({
+		url: 'http://www.google.com',
+		config: SelectPdfApi::YamlConfig.new(minimum_config)
+	})}
 
 	before do
 		select_pdf.config.load_config(minimum_config)
@@ -56,6 +59,14 @@ describe SelectPdfApi do
 		def test_it_fails_without_a_url
 			VCR.use_cassette('download_no_url') do
 				-> {select_pdf.download}.must_raise SelectPdfApi::DownloadError
+			end
+		end
+
+		def test_downloads_a_pdf
+			VCR.use_cassette('download_pdf') do
+				select_pdf.config.options['key'] = ENV["SELECT_PDF_KEY"]
+				select_pdf.download
+				select_pdf.success?.must_equal true
 			end
 		end
 	end
