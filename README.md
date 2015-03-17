@@ -2,9 +2,9 @@
 
 [![Gem Version](https://badge.fury.io/rb/select_pdf_api.svg)](http://badge.fury.io/rb/select_pdf_api)    [![Build Status](https://travis-ci.org/arian-amador/select_pdf_api.svg?style=flat)](https://travis-ci.org/arian-amador/select_pdf_api)    [![Inline docs ](https://inch-ci.org/github/arian-amador/select_pdf_api.svg?branch=master)](https://inch-ci.org/github/arian-amador/select_pdf_api)
 
-A wrapper for the [selectpdf.org](http://selectpdf.com/) public API.
+A wrapper for the [selectpdf.com](http://selectpdf.com/) public API.
 
-The [selectpdf.org](http://selectpdf.com/) online API allows you to create PDFs from web pages and raw HTML code in your applications.
+The [selectpdf.com](http://selectpdf.com/) online API allows you to create PDFs from web pages and raw HTML code in your applications.
 
 ## Installation
 Add this line to your application's Gemfile:
@@ -21,7 +21,7 @@ Or install it yourself as:
 
 ## Usage
 ``` ruby
-pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Load the default ./config/select-pdf-config.yml and set the url to capture 
+pdf_doc = SelectPdfApi.new({url: "http://www.google.com"})   # Load the default ./config/select-pdf-config.yml and set the url to capture
 pdf_doc.download   # Save result to the default ./document.pdf
 
 ```
@@ -40,8 +40,8 @@ pdf_doc.download
 
 ```
 ## Config
-By default the YamlConfig class is used to parse a `yml` file that holds all API options including the API key. You'll need to have a config folder and at minimum 
-`select-pdf-config.yml`. 
+By default the YamlConfig class is used to parse a `yml` file that holds all API options including the API key. You'll need to have a config folder and at minimum
+`select-pdf-config.yml`.
 
 ```ruby
 # Inside your project folder:
@@ -63,25 +63,25 @@ pdf_select.config.options['key']   # Returns the API key
 
 It's also possible to create your own Config class as long as it has an `options` method that returns a `Hash` of options.
 ``` ruby
-require "select_pdf_api"                                                        
-                                                                                
-class SelectConfig                                                              
-  class ActiveDirectoryConfig                                                              
-                                                                                
+require "select_pdf_api"
+
+class SelectConfig
+  class ActiveDirectoryConfig
+
   # ... snip ...
-                                                                                
-    def options                                                                 
+
+    def options
       # Returns [Hash] of options
-    end                                                                         
-  end                                                                           
-end                                                                             
-                                                                                
+    end
+  end
+end
+
 pdf_select = SelectPdfApi.new({url: "http://www.google.com", config: SelectConfig::TestConfig.new})
 pdf_select.config.options   # Return [Hash] from custom class
 
 ```
 
-See the [API Documentation](https://github.com/arian-amador/select_pdf_api/) for all the options. 
+See the [API Documentation](https://github.com/arian-amador/select_pdf_api/) for all the options.
 
 ## Documentation
 * API - http://selectpdf.com/html-to-pdf-api/
