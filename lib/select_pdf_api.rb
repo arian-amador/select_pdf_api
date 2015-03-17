@@ -23,11 +23,11 @@ class SelectPdfApi
 	# Base API URL
 	API_END_POINT = 'http://selectpdf.com/api'
 
-	# @!method initialize(user_opts)
+	# @!method initialize(opts)
 	# @param [Hash] opts custom options provided by the user.
-	# @option user_opts [String] url the url to create PDF from.
-	# @option user_opts [Class] config allows you to provide your own config class.
-	# @option user_opts [String] save_to the file the output PDF file will be saved to.
+	# @option opts [String] url the url to create PDF from.
+	# @option opts [Class] config allows you to provide your own config class.
+	# @option opts [String] save_to the file the output PDF file will be saved to.
 	def initialize(opts={})
 		@url 		 = opts[:url]
 		@config  = opts[:config] || SelectPdfApi::YamlConfig.new

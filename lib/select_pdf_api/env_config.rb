@@ -6,10 +6,8 @@ class SelectPdfApi
 		attr_reader :data
 
 		# API Options list
-		API_OPTIONS = %w{
-			key page_size page_orientation pdf_name margin_top margin_right margin_bottom margin_left
-			page_numbers user_password owner_password web_page_width web_page_height
-		}
+		API_OPTIONS = %w{key page_size page_orientation pdf_name margin_top margin_right margin_bottom margin_left
+			page_numbers user_password owner_password web_page_width web_page_height}
 
 		# @!method initialize(env_var)
 		# @param [String] env_var Name of the environment variable the API key is set to.
